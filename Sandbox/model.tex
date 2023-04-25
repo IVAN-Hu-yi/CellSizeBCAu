@@ -1,0 +1,71 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{caption}
+
+\title{fyp}
+\author{Yingcai Hu}
+
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+
+\section{Methods}
+\subsection{Microbial Consumer-Resource Model (MiCRM)}
+
+Here we adopt the framework from \href{https://journals.plos.org/ploscompbiol/articleid=10.1371/journal.pcbi.1006793}{Marsland, 2019}: the energy per unit time or, The metabolic rate, $J^{in}_{ij}$ of species $i$ using resource $j$ depends on the concentration of resource $j$, $R_j$ and species preference on a particular resource type $c_{ij}$:
+
+\begin{equation}
+    J^{in}_{ij} = w_{j} \sigma(c_{ij} R_j)
+\end{equation}
+
+
+where the function $\sigma(x) = x_{\max} \frac{x}{k + x}$ is the Monod function that maps the resource availabe to the resources taken by bacteria. The total energy, $ J^{grow}_i $, used for growth of biomass will be defined by setting a size-scaled fraction ($l_{j}$) of energy returned to the environment:
+
+\begin{equation}
+    J^{grow}_{i} = \sum^M_{j=1} (1-l_{j}) J^{in}_{ij}
+\end{equation}
+
+We adopt a MiCRM from \href{https://journals.plos.org/ploscompbiol/articleid=10.1371/journal.pcbi.1006793}{Marsland, 2019} based on early work of \href{https://doi.org/10.1016/0040-5809(70)90039-0}{MacArthur R}. 
+Assuming there are $N$ species and $M$ types of resouces,
+the dynamics of biomass abundance $C_i$ of species $i^{th}$ and resource concentration $R_j$ of type $j^{th}$  is
+
+\begin{equation} 
+    \frac{dC_i}{dt} = \mu C_i \bigg ( J^{grow}_i  - m_i(C_i) \bigg )
+\end{equation}
+
+ \begin{equation}
+    \frac{dR_j}{dt} = \rho_j - k_{ab} \sum^N_{i=1} \bigg ( C_i U_{ij}(C_i) R_j - \sum^M_{k=1} C_i U_{ik}(C_i) R_k l_{kj}(C_i) \bigg )
+ \end{equation}
+
+ Here, $U_{ij}$ is uptake rate of resource $j$ by speceis $i$, $l_{ij}$ is the leakage of resource $j$ to the environment in the form of resource $k$. $m_i$ is the maintainence required for species $i$. The terms are explained in Table 1. 
+
+ \begin{center}
+    \captionof{table}{Definition and Units of Parametres}
+    \begin{tabular}{ |c|c|c| } 
+     \hline
+     Symbols & Definition & Units \\
+
+     \hline 
+     $C$ & Biomass content & $mass$ \\ 
+     $R$ & Resouces content & $mass$ \\
+     $U$ & Uptake rate & $time^{-1}$ \\
+     $l$ & Fraction of leakage & $None$ \\
+     $m$ & Maintainence coefficient & $time^{-1}$ \\
+     $\rho$ & External resource supply & $mass/time$ \\
+     $\mu$ &  Constant that scales the resource uptake to growth & $mass^{-1}$ \\
+     $k_m$ & Constant that scales the maintanence & $mass^{-1}$ \\
+     $k_{ab}$ & Constant that scales the body mass and resource intake & $mass^{-1}$ \\
+     \hline
+
+    \end{tabular}
+    \end{center}
+
+Here $U_{ij}(C_i)$, $l_{jk}(C_i)$ and $m_i(C_i)$ are scaled by biomass for investigating the effect of biomass on population dynamics within the bacterial community. 
+
+\subsection{Body mass Parametrisation on MiCRM}
+\end{document}
