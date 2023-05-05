@@ -14,7 +14,7 @@ class Paras:
         self.R_half = 1 # coefficient in sigma func
         self.mu = 1 # intrinsic growth rate  mass^-1
         self.km = 1 # individual per unit mass mass^-1
-        self.rho_base = 0.1 # mean for rho
+        self.rho_base = 1 # mean for rho
         self.l_base = 0.1 # mean for leakage
         self.m_base = 1.2 # mean for m
         self.v_max_base = 1.5 # mean for vmax
@@ -38,7 +38,7 @@ class Paras:
         self.w = 2 # one parameter distribution 1 or 2 B(1, w)
 
         ####### relevant paras in consumer preferences (similar to Marsland 2019)
-        self.mu_c = 0.25 # proportion of favor resources types
+        self.mu_c = 0.4 # proportion of favor resources types
         self.c0 = 0.01 # fraction of uptake of non-favored resource type
 
         ####### relevant paras in conversion efficiency
