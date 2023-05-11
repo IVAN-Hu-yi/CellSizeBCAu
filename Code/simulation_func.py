@@ -11,7 +11,7 @@ from odes import odes_not_scaled
 from numpy.random import default_rng
 from math import sqrt
 
-def detect_steady_state(t, y, l, m, rho, mu, km, p, D, vmax, type, B0, M0, E0, alpha, beta, gamma, Rhalf, avgm, tol):
+def detect_steady_state(t, y, l, m, rho, mu, km, p, D, vmax, type, B0, M0, E0, alpha, beta, gamma, Rhalf, avgm, tol, N):
     '''_summary_
 
     Args:
@@ -39,8 +39,9 @@ def detect_steady_state(t, y, l, m, rho, mu, km, p, D, vmax, type, B0, M0, E0, a
     Returns:
         difference between two time step in y
     '''
+    
     diff = odes_scale_size(t, y, l, m, rho, mu, km, p, D, vmax, type, B0, M0, E0, alpha, beta, gamma, Rhalf, avgm)
-    l2_norm = sqrt(diff[0]**2+diff[1]**2)
+    l2_norm = sqrt(np.sum(diff[0:N]**2))
     return l2_norm - tol
 
 def sim_run(N, M, para:Paras, assemblenum, tstop, teval, scale=True):
@@ -107,9 +108,9 @@ def sim_run_tol(N, M, para:Paras, assemblenum, tstop, teval, scale=True, tol=1e-
         pars = (para.l, para.m, para.rho, para.mu, para.km, para.p, para.D, para.v_in_max, para.type, para.B0, para.M0, para.E0, para.alpha, para.beta, para.gamma, para.R_half, para.avgm)
 
         odec = lambda t, y:odes_scale_size(t, y, *pars)
-        detect_ss_odec = lambda t, y: detect_steady_state(t, y, *pars, tol)
+        detect_ss_odec = lambda t, y: detect_steady_state(t, y,*pars, tol, N)
         detect_ss_odec.terminal = True
-        detect_ss_odec.direction = -1
+        # detect_ss_odec.direction = 0
         
         result = solve_ivp(
         odec, t_span=[time[0], time[-1]], y0=y0, t_eval=time, dense_output=True, events=detect_ss_odec)
@@ -240,7 +241,7 @@ def sim_sub_run_tol(N, M, assemblenum, tstop, teval, subcommunity_size=10, num_s
             pars = (para.l, para.m, para.rho, para.mu, para.km, para.p, para.D, para.v_in_max, para.type, para.B0, para.M0, para.E0, para.alpha, para.beta, para.gamma, para.R_half, para.avgm)
 
             odec = lambda t, y:odes_scale_size(t, y, *pars)
-            detect_ss_odec = lambda t, y: detect_steady_state(t, y, *pars, tol)
+            detect_ss_odec = lambda t, y: detect_steady_state(t, y, *pars, tol, subcommunity_size)
             detect_ss_odec.terminal = True
             detect_ss_odec.direction = -1
             

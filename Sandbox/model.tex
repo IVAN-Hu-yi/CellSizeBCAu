@@ -3,6 +3,7 @@
 \usepackage{url}
 \usepackage{hyperref}
 \usepackage{caption}
+\usepackage{amsmath}
 
 \title{fyp}
 \author{Yingcai Hu}
@@ -17,29 +18,28 @@
 \section{Methods}
 \subsection{Microbial Consumer-Resource Model (MiCRM)}
 
-Here we adopt the framework from \href{https://journals.plos.org/ploscompbiol/articleid=10.1371/journal.pcbi.1006793}{Marsland, 2019}: the energy per unit time or, The metabolic rate, $J^{in}_{ij}$ of species $i$ using resource $j$ depends on the concentration of resource $j$, $R_j$ and species preference on a particular resource type $c_{ij}$:
+Here we adopt the framework from \href{https://journals.plos.org/ploscompbiol/articleid=10.1371/journal.pcbi.1006793}{Marsland, 2019}: the energy per unit time or, The metabolic rate, $v^{in}_{ij}$ of species $i$ using resource $j$ depends on the concentration of resource $j$, $R_j$ and species preference on a particular resource type $p_{ij}$:
 
 \begin{equation}
-    J^{in}_{ij} = w_{j} \sigma(c_{ij} R_j)
+    v^{in}_{ij} =  \sigma(p_{ij} R_j) = \frac{v_{max}p_{ij}R_{ij}}{R_h + R_{ij}}
 \end{equation}
 
 
-where the function $\sigma(x) = x_{\max} \frac{x}{k + x}$ is the Monod function that maps the resource availabe to the resources taken by bacteria. The total energy, $ J^{grow}_i $, used for growth of biomass will be defined by setting a size-scaled fraction ($l_{j}$) of energy returned to the environment:
+where the function $\sigma(x) = x_{\max} \frac{x}{k + x}$ is the Monod function that maps the resource availabe to the resources taken by bacteria. The total mass, $ v^{grow}_i $, used for growth of biomass will be defined by setting a fraction ($l_{j}$) of mass returned to the environment:
 
 \begin{equation}
-    J^{grow}_{i} = \sum^M_{j=1} (1-l_{j}) J^{in}_{ij}
+    v^{grow}_{i} = \sum^M_{j=1} (1-l_{j}) v^{in}_{ij}
 \end{equation}
 
-We adopt a MiCRM from \href{https://journals.plos.org/ploscompbiol/articleid=10.1371/journal.pcbi.1006793}{Marsland, 2019} based on early work of \href{https://doi.org/10.1016/0040-5809(70)90039-0}{MacArthur R}. 
-Assuming there are $N$ species and $M$ types of resouces,
+Therefore, assuming there are $N$ species and $M$ types of resouces,
 the dynamics of biomass abundance $C_i$ of species $i^{th}$ and resource concentration $R_j$ of type $j^{th}$  is
 
 \begin{equation} 
-    \frac{dC_i}{dt} = \mu C_i \bigg ( J^{grow}_i  - m_i(C_i) \bigg )
+    \frac{dC_i}{dt} = \mu C_i  ( v^{grow}_i  - \phi_i )
 \end{equation}
 
  \begin{equation}
-    \frac{dR_j}{dt} = \rho_j - k_{ab} \sum^N_{i=1} \bigg ( C_i U_{ij}(C_i) R_j - \sum^M_{k=1} C_i U_{ik}(C_i) R_k l_{kj}(C_i) \bigg )
+    \frac{dR_j}{dt} = \rho_j - k_{m} \sum^N_{i=1} C_i (v^{out}_{ij} - v^{in}_{ij})
  \end{equation}
 
  Here, $U_{ij}$ is uptake rate of resource $j$ by speceis $i$, $l_{ij}$ is the leakage of resource $j$ to the environment in the form of resource $k$. $m_i$ is the maintainence required for species $i$. The terms are explained in Table 1. 
@@ -65,7 +65,45 @@ the dynamics of biomass abundance $C_i$ of species $i^{th}$ and resource concent
     \end{tabular}
     \end{center}
 
-Here $U_{ij}(C_i)$, $l_{jk}(C_i)$ and $m_i(C_i)$ are scaled by biomass for investigating the effect of biomass on population dynamics within the bacterial community. 
+Here $v_{ij}$, $v^{grow}$ and $\phi_i$ are scaled by biomass for investigating the effect of biomass on population dynamics within the bacterial community. 
 
 \subsection{Body mass Parametrisation on MiCRM}
+
+\subsection{Linear Stability Analysis}
+
+Let $x=[C_1, C_2, \dots, C_N, R_1, R_2, \dots, R_M] \in S $, then $x^* \in S $ is the steady state (i.e. $f'_n(x^*) = 0$ and $f'_{N+m}(x^*)=0$ for $n=1, 2, 3,\dots, N, m=1, 2, 3, \dots, N$) . The jocobian matrix of the MiRCM will be defined as followed:
+\[ J = 
+\begin{bmatrix}
+
+    \frac{\partial{f_1}}{\partial{C_1}} & \frac{\partial{f_1}}{\partial{C_2}} & \dots & \frac{\partial{f_1}}{\partial{C_N}} & \frac{\partial{f_1}}{\partial{R_1}} & \frac{\partial{f_1}}{\partial{R_2}} & \dots & \frac{\partial{f_1}}{\partial{R_M}}\\
+    \frac{\partial{f_2}}{\partial{C_1}} & \frac{\partial{f_2}}{\partial{C_2}} & \dots & \frac{\partial{f_2}}{\partial{C_N}} & \frac{\partial{f_2}}{\partial{R_1}} & \frac{\partial{f_2}}{\partial{R_2}} & \dots & \frac{\partial{f_2}}{\partial{R_M}}\\
+    \vdots & \vdots  & \ddots & \vdots & \vdots & \vdots & \ddots & \vdots\\
+    \frac{\partial{f_N}}{\partial{C_1}} & \frac{\partial{f_N}}{\partial{C_2}} & \dots & \frac{\partial{f_N}}{\partial{C_N}} & \frac{\partial{f_N}}{\partial{R_1}} & \frac{\partial{f_N}}{\partial{R_2}} & \dots & \frac{\partial{f_N}}{\partial{R_M}}\\
+    \frac{\partial{f_{N+1}}}{\partial{C_1}} & \frac{\partial{f_{N+1}}}{\partial{C_2}} & \dots & \frac{\partial{f_{N+1}}}{\partial{C_N}} & \frac{\partial{f_{N+1}}}{\partial{R_1}} & \frac{\partial{f_{N+1}}}{\partial{R_2}} & \dots & \frac{\partial{f_{N+1}}}{\partial{R_M}}\\
+    \frac{\partial{f_{N+2}}}{\partial{C_1}} & \frac{\partial{f_{N+2}}}{\partial{C_2}} & \dots & \frac{\partial{f_{N+2}}}{\partial{C_N}} & \frac{\partial{f_{N+2}}}{\partial{R_1}} & \frac{\partial{f_{N+2}}}{\partial{R_2}} & \dots & \frac{\partial{f_{N+2}}}{\partial{R_M}}\\
+    \vdots & \vdots  & \ddots & \vdots & \vdots & \vdots & \ddots & \vdots\\
+    \frac{\partial{f_{N+M}}}{\partial{C_1}} & \frac{\partial{f_{N+M}}}{\partial{C_2}} & \dots & \frac{\partial{f_{N+M}}}{\partial{C_N}} & \frac{\partial{f_{N+M}}}{\partial{R_1}} & \frac{\partial{f_{N+M}}}{\partial{R_2}} & \dots & \frac{\partial{f_{N+M}}}{\partial{R_M}}\\
+    
+    \end{bmatrix}
+    \]
+
+The $f_n$ and $f_{N+m}$ are vector-valued function that returns Equation 3 and Equation 4, therefore the elements in $J$ are defined as:
+\begin{equation}
+    \frac{\partial{f_n}}{\partial{C_n}} = \mu (v^{grow}_n - \phi_n)
+\end{equation}
+
+\begin{equation}
+    \frac{\partial{f_n}}{\partial{R_m}} = \mu C_n (1-l_m) \frac{v^{max}_{nm} p_{nm} R_m}{(R_h + p_{nm}R_m)^2}
+\end{equation}
+
+\begin{equation}
+    \frac{\partial{f_{N+m}}}{\partial{C_n}} = k_m C_n (v^{out}_{nm} - v^{in}_{nm})
+\end{equation}
+
+\begin{equation}
+    \frac{\partial{f_{N+m}}}{\partial{R_m}} = k_m \displaystyle \sum^N_{i=1} C_i (D_{mm}l_m - 1) \frac{v^{max}_{nm} p_{nm} R_m}{(R_h + p_{nm}R_m)^2}
+\end{equation}
+
+To investigate the stability of the system on steady state $x^*$, eigenvalue decomposition will be performed on the jocobian evaluated at $x^*$, i.e., $J_{|x=x^*} = P^{-1} \Lambda P $, using numpy library.
+
 \end{document}

@@ -120,7 +120,7 @@ def int_vmax(N, M, v_max_base, p, number, assemblenum):
         np.array : N by M matrix
     '''
 
-    vmax = np.ones((N, M))*0.1 # for non-favored 0.1 max uptake
+    vmax = np.ones((N, M))*0.1*1/M # for non-favored 0.1 max uptake
     for i in range(N):
         temp_p = p[i, :] # identify preferred resource
         temp_vmax = vmax[i, :]
