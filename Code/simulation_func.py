@@ -127,10 +127,10 @@ def sim_run_tol(N, M, para:Paras, assemblenum, tstop, teval, scale=True, tol=1e-
     return Rt, Ct, t, para
 
 
-def sim_sub_run(N, M, assemblenum, tstop, teval, subcommunity_size=10, num_subcommunity=20, scale=True):
+def sim_sub_run(N, M, assemblenum, para:Paras, tstop, teval, subcommunity_size=50, num_subcommunity=20, scale=True):
     
     ### initialised parametres
-    para = Paras(N, M)
+    
     p, number = int_preferences(N, M, para.mu_c, assemblenum)
     D = int_conversion(M, para.Dbase, para.number, assemblenum, para.sparsity)
     l = int_l(M, para.l_base, assemblenum)
