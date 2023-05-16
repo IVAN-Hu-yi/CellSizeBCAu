@@ -52,7 +52,7 @@ def int_preferences(N, M, mu_c, assemblenum):
 
     for i in range(N):
         np.random.seed(i) # ensure for each experiment, each species same preferences
-        idx = np.random.randint(0, M, number) # select favored resoruces
+        idx = np.random.choice(range(M), number, replace=False) # select favored resoruces
         
         np.random.seed(i)
         values = np.random.normal(1/number, 0.001, number).tolist() # initialisation
@@ -78,12 +78,12 @@ def int_conversion(M, Dbase, number, assemblenum, sparse=False):
     np.random.seed(seed+100)
     if sparse: 
         D = np.random.normal(Dbase, Dbase/10, (M, M)).reshape(M, M) # sample conversion
-        D = D * (1-np.tri(*D.shape, k=-1)) # not allow reversible reactions
+        # D = D * (1-np.tri(*D.shape, k=-1)) # not allow reversible reactions
     else:
         D = np.zeros((M, M))
         for i in range(M):
             np.random.seed(seed+i*100)
-            num = np.random.randint(1, number+1) # number of resource type being converted from one resource
+            num = np.random.randint(20, number+1) # number of resource type being converted from one resource
             idx = np.random.randint(0, M, num) # select idx for corresponding resource type
             values = np.random.normal(Dbase, Dbase/10, num) # sample conversion
             # D = D * (1-np.tri(*D.shape, k=-1)) # not allow reversible reactions
@@ -121,14 +121,11 @@ def int_vmax(N, M, v_max_base, p, number, assemblenum):
     '''
 
     vmax = np.ones((N, M))*0.1*1/M # for non-favored 0.1 max uptake
+    
     for i in range(N):
         temp_p = p[i, :] # identify preferred resource
-        temp_vmax = vmax[i, :]
-        temp_p_copy = np.sort(temp_p)[::-1]
-        val = temp_p_copy[number-1] # least preferred resource among the preferred
-        np.random.seed(i+40+assemblenum)
-        temp_vmax[temp_p>=val] = np.random.normal(v_max_base, 0.1, len(temp_vmax[temp_p>=val])) # define max uptake
-        vmax[i, :] = temp_vmax # update temp_vmax
+        idlist = np.where(temp_p[temp_p>=0]) # index where p>0
+        vmax[i, idlist] = np.random.normal(2, 0.05, len(idlist))
     
     return vmax
 

@@ -1,11 +1,11 @@
-\documentclass{article}
+\documentclass[12pt]{article}
 \usepackage{graphicx} % Required for inserting images
 \usepackage{url}
 \usepackage{hyperref}
 \usepackage{caption}
 \usepackage{amsmath}
 
-\title{fyp}
+\title{The Role of Cell Size on bacterial community assembly}
 \author{Yingcai Hu}
 
 
@@ -16,12 +16,17 @@
 \section{Introduction}
 
 \section{Methods}
+
+\subsection{Defining bacterial taxa and resource types}
+
+In this study, each bacterial taxon $i$ are defined by their resource preference and average cell mass $m_i$. The preferred resources for each taxa are chosen uniformly 
+
 \subsection{Microbial Consumer-Resource Model (MiCRM)}
 
 Here we adopt the framework from \href{https://journals.plos.org/ploscompbiol/articleid=10.1371/journal.pcbi.1006793}{Marsland, 2019}: the energy per unit time or, The metabolic rate, $v^{in}_{ij}$ of species $i$ using resource $j$ depends on the concentration of resource $j$, $R_j$ and species preference on a particular resource type $p_{ij}$:
 
 \begin{equation}
-    v^{in}_{ij} =  \sigma(p_{ij} R_j) = \frac{v_{max}p_{ij}R_{ij}}{R_h + R_{ij}}
+    v^{in}_{ij} =  \sigma(p_{ij} R_j) = \frac{v_{max}p_{ij}R_{ j}}{R_h + R_{j}}
 \end{equation}
 
 
