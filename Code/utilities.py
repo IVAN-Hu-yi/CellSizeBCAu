@@ -172,3 +172,27 @@ def assocation_series(data, w, s, tstarts, tstop):
     return series_M, series_p
 
 #### Plot Funcs
+def plot_pop_trj(para, t, Ct, ax):
+    avgm = para.avgm.reshape(para.avgm.shape[0])
+
+# calulate abundance
+    for j in range(len(Ct[1, :])):
+        Ct[:, j] = Ct[:, j]/avgm
+
+# if abundance smaller than 1 then the species extincts
+    for i in range(len(Ct[:, 1])):
+        temp = Ct[i, :]
+        temp[temp < 1] = 0
+        Ct[i, :] = np.rint(temp)
+
+# plot species biomass trajectories
+    np.seterr(divide = 'ignore')
+    # plt.figure(figsize=(6, 6), dpi=300)
+    for i in range(para.N):
+        sns.lineplot(x=np.log10(t), y=np.log10(Ct[i, :]), color='grey', alpha=0.3, ax=ax)
+    sns.despine(offset=10, trim=True)
+    ax.set_title(f'$M_0 = {np.round(para.B0, 3)}$, $B_0 = {np.round(para.B0, 3)}$, $l = {np.round(para.l_base, 4)}$')
+    ax.set_xlabel('$log_{10}(Time)$')
+    ax.set_ylabel('$log_{10}(Abundance)$')
+    ax.text(0, max(np.log10(Ct).flatten()), f'Remaining Species : {len(Ct[Ct[:, -1]>0,-1])}')
+

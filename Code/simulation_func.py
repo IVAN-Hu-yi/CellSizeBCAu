@@ -56,7 +56,7 @@ def sim_run(N, M, para:Paras, assemblenum, tstop, teval, scale=True):
     m = int_mt(N, para.m_base, assemblenum)
     avgm = allocate_avgm(N, para.w, assemblenum, para.ymin, para.ymax)
 
-    ## Initialised Initial conditions
+    ## Initialised Initial conditions 
     R0 = int_R(M, para.R0, assemblenum)
     C0 = int_C(avgm, para.x0)
 

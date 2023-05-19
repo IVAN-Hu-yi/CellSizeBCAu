@@ -11,39 +11,39 @@ class Paras:
 
         ####### Model Paras fixed
 
-        self.R_half = 5 # coefficient in sigma func
+        self.R_half = 10 # coefficient in sigma func
         self.mu = 1 # intrinsic growth rate  mass^-1
         self.km = 1 # individual per unit mass mass^-1
-        self.rho_base = 10 # mean for rho
+        self.rho_base = 50 # mean for rho
         self.l_base = 0.1 # mean for leakage
-        self.m_base = 1.2 # mean for m
-        self.v_max_base = 4 # mean for vmax
+        self.m_base = 1 # mean for m
+        self.v_max_base = 10 # mean for vmax
         self.type = 2
-        self.x0 = 5 # initial density mass/individual
+        self.x0 = 1 # initial density mass/individual
 
         ####### Scaling Paras
 
-        self.B0 = 1 # Normalisation constant for resource inflow
-        self.M0 = 1 # Normalisation constant for maintenance
+        self.B0 = 5 # Normalisation constant for resource inflow
+        self.M0 = 5 # Normalisation constant for maintenance
         self.E0 = 1 # Normalisation constant for outflow
         self.alpha = 0.72 # size-scaling exponent for inflow 
         self.gamma = 0.86 # size-scaling exponent for outflow
         self.beta = 0.72 # maintainence
-        self.ymin = -2
-        self.ymax = 3
+        self.ymin = -3
+        self.ymax = 2
 
 
         ####### initialisation
-        self.R0 = 10 # initial resource mass
+        self.R0 = 2000 # initial resource mass
         self.w = 2 # one parameter distribution 1 or 2 B(1, w)
 
         ####### relevant paras in consumer preferences (similar to Marsland 2019)
-        self.mu_c = 0.6 # proportion of favor resources types
+        self.mu_c = 0.2 # proportion of favor resources types
         self.c0 = 0.01 # fraction of uptake of non-favored resource type
 
         ####### relevant paras in conversion efficiency
         self.Dbase = 0.2 # base efficiency for all resource-resource pair 
-        self.number = 60 # integer indicating maximum number of resources being converted
+        self.number = 0.9 # proportion indicating maximum number of resources being converted
         self.sparsity = False # whether limited converted resource applied
 
     def paras(self, Ci, Ri, l, rho, p, vmax, m, D, avgm):

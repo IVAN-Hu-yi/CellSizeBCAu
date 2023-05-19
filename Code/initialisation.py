@@ -51,8 +51,10 @@ def int_preferences(N, M, mu_c, assemblenum):
     number = int(mu_c*M) if int(mu_c*M) > 0 else 1 # number of preferred resources
 
     for i in range(N):
+        x = np.arange(M)
         np.random.seed(i) # ensure for each experiment, each species same preferences
-        idx = np.random.choice(range(M), number, replace=False) # select favored resoruces
+        np.random.shuffle(x)
+        idx = x[0:number] # select favored resoruces
         
         np.random.seed(i)
         values = np.random.normal(1/number, 0.001, number).tolist() # initialisation
@@ -69,26 +71,28 @@ def int_conversion(M, Dbase, number, assemblenum, sparse=False):
     Args:
         M (int): int
         Dbase (float): Guassian mean
-
+        number (float): proportion of resource can be converted
     Returns:
         np.array: shape input_resource * output resource 
     '''
 
     # np.random.seed(seed+assemblenum)
     np.random.seed(seed+100)
+
     if sparse: 
-        D = np.random.normal(Dbase, Dbase/10, (M, M)).reshape(M, M) # sample conversion
+        D = np.random.normal(Dbase, Dbase/(M*10), (M, M)).reshape(M, M) # sample conversion
         # D = D * (1-np.tri(*D.shape, k=-1)) # not allow reversible reactions
+
     else:
+        num = int(M*number) if int(M*number) >= 1 else 1
         D = np.zeros((M, M))
         for i in range(M):
+            x = np.arange(M)
             np.random.seed(seed+i*100)
-            num = np.random.randint(20, number+1) # number of resource type being converted from one resource
-            idx = np.random.randint(0, M, num) # select idx for corresponding resource type
-            values = np.random.normal(Dbase, Dbase/10, num) # sample conversion
+            np.random.shuffle(x)
+            idx = x[0:num]
+            D[i, idx] = np.random.normal(Dbase, Dbase/10, num) # sample conversion
             # D = D * (1-np.tri(*D.shape, k=-1)) # not allow reversible reactions
-            for x, y in zip(idx, range(num)):
-                D[i, x] = values[y]
 
     return D/np.sum(D, axis=1)[:, np.newaxis] # row-wise normalisation
     
@@ -120,12 +124,12 @@ def int_vmax(N, M, v_max_base, p, number, assemblenum):
         np.array : N by M matrix
     '''
 
-    vmax = np.ones((N, M))*0.1*1/M # for non-favored 0.1 max uptake
+    vmax = np.zeros((N, M)) # for non-favored -- no uptake
     
     for i in range(N):
         temp_p = p[i, :] # identify preferred resource
         idlist = np.where(temp_p[temp_p>=0]) # index where p>0
-        vmax[i, idlist] = np.random.normal(2, 0.05, len(idlist))
+        vmax[i, idlist] = np.random.normal(v_max_base, 0.05, len(idlist))
     
     return vmax
 

@@ -49,7 +49,7 @@ def odes_scale_size(t, y, l, m, rho, mu, km, p, D, vmax, type, B0, M0, E0, alpha
     '''ODEs of our model -- scaled version
 
     Args:
-        y (list): integrate over
+        y (list): initial values
         t (scaler/vector): dummies required for ode
         l (np.array): leakge M*1 matrix
         m (np.array): maintainence N*1 matrix 
@@ -69,7 +69,7 @@ def odes_scale_size(t, y, l, m, rho, mu, km, p, D, vmax, type, B0, M0, E0, alpha
         Rhalf (float): constant for sigma function
         avgm (np.array): N*1 matrix containing the average cell size of a population
     Returns:
-        list: [dC/dt, dR/dt]
+        A (np.array): A[0:M] = dR/dt; A[N:M+N] = dC/dt
     '''
     N, M = vmax.shape
     R, C = y[0:M], y[M:M+N]
@@ -85,7 +85,7 @@ def odes_scale_size(t, y, l, m, rho, mu, km, p, D, vmax, type, B0, M0, E0, alpha
 
     # caculate intermediate
     avgm = avgm.reshape(N, 1)
-    vmax = scale_vin(vmax, avgm, B0, alpha)
+    vmax = scale_vmax(vmax, avgm, B0, alpha)
     v_in = vin(p, R, Rhalf, vmax, type)
     v_grow = vgrow(v_in, l)
     v_out = vout(v_in, l, D)
