@@ -17,14 +17,14 @@ class Paras:
         self.rho_base = 50 # mean for rho
         self.l_base = 0.1 # mean for leakage
         self.m_base = 1 # mean for m
-        self.v_max_base = 10 # mean for vmax
+        self.v_max_base = 5 # mean for vmax
         self.type = 2
         self.x0 = 1 # initial density mass/individual
 
         ####### Scaling Paras
 
-        self.B0 = 5 # Normalisation constant for resource inflow
-        self.M0 = 5 # Normalisation constant for maintenance
+        self.B0 = 1 # Normalisation constant for resource inflow
+        self.M0 = 1 # Normalisation constant for maintenance
         self.E0 = 1 # Normalisation constant for outflow
         self.alpha = 0.72 # size-scaling exponent for inflow 
         self.gamma = 0.86 # size-scaling exponent for outflow
@@ -43,7 +43,7 @@ class Paras:
 
         ####### relevant paras in conversion efficiency
         self.Dbase = 0.2 # base efficiency for all resource-resource pair 
-        self.number = 0.9 # proportion indicating maximum number of resources being converted
+        self.number = 0.5 # proportion indicating maximum number of resources being converted
         self.sparsity = False # whether limited converted resource applied
 
     def paras(self, Ci, Ri, l, rho, p, vmax, m, D, avgm):

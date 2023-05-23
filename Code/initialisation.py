@@ -1,5 +1,6 @@
 import numpy as np
 from parametres import Paras
+import size_scaled_func
 
 # Initial Conditions
 seed = 100 # set seed to ensure reproducible results in each experiment
