@@ -7,6 +7,21 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from scipy.stats import spearmanr
 from scipy.stats import permutation_test
+from scipy.integrate import solve_ivp
+from parametres import Paras
+from utilities import *
+from initialisation import *
+from odes import odes_scale_size
+import matplotlib.pyplot as plt
+from size_scaled_func import *
+import datetime as dt
+from simulation_func import *
+import pandas as pd
+import pickle as pkl
+import os
+import seaborn as sns
+import scipy.stats as stats
+import networkx as nx
 
 def vin(p, R, Rhalf, vmax=None, type=2):
     '''Calcualte Vin for each species
@@ -196,3 +211,52 @@ def plot_pop_trj(para, t, Ct, ax):
     ax.set_ylabel('$log_{10}(Abundance)$')
     ax.text(0, max(np.log10(Ct).flatten()), f'Remaining Species : {len(Ct[Ct[:, -1]>0,-1])}')
 
+def load_data(path, num_files, type:set = {'C', 'R', 'para', 'id', 't', 'all'}):
+    
+    '''A function to load data
+
+    Returns:
+        _type_: _description_
+    '''
+
+
+    data = []
+    
+    if type == 'C':
+        for i in range(num_files):
+            data.append(np.load(path+f'\Ct{i+1}.npy'))
+        return data
+    
+    elif type == 'R':
+        for i in range(num_files):
+            data.append(np.load(path+f'\Rt{i+1}.npy'))
+        return data
+
+    elif type == 'para':
+        for i in range(num_files):
+            data.append(pkl.load(open(path+f'\para{i+1}.pkl', 'rb')))
+            return data
+
+    elif type == 'id':
+        for i in range(num_files):
+            data.append(np.load(path+f'\id{i+1}.npy'))
+        return data
+
+    elif type == 't':
+        for i in range(num_files):
+            data.append(np.load(path+f'\\t{i+1}.npy'))
+        return data
+
+    elif type == 'all':
+        for i in range(num_files):
+
+            dic_pair = {}
+            dic_pair['t'] = np.load(path+f'\\t{i+1}.npy')
+            dic_pair['Rt'] = np.load(path+f'\Rt{i+1}.npy')
+            dic_pair['Ct'] = np.load(path+f'\Ct{i+1}.npy')
+            dic_pair['id'] = np.load(path+f'\id{i+1}.npy')
+            dic_pair['para'] = pkl.load(open(path+f'\para{i+1}.pkl', 'rb'))
+            dic_pair['scaling exponents'] = (dic_pair['para'].alpha, dic_pair['para'].beta)
+            data.append(dic_pair)
+
+        return data
