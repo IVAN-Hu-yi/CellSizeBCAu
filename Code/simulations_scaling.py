@@ -9,7 +9,7 @@ from scipy.integrate import solve_ivp
 from parametres import Paras
 from utilities import *
 from initialisation import *
-from odes import odes_scale_size
+from models import odes_scale_size
 import matplotlib.pyplot as plt
 from size_scaled_func import *
 import datetime as dt

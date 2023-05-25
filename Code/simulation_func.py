@@ -3,11 +3,10 @@ from scipy.integrate import solve_ivp
 from parametres import Paras
 from utilities import *
 from initialisation import *
-from odes import odes_scale_size
+from models import *
 import matplotlib.pyplot as plt
 from size_scaled_func import *
 import datetime as dt
-from odes import odes_not_scaled
 from numpy.random import default_rng
 from math import sqrt
 
