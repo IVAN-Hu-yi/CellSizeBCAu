@@ -34,7 +34,7 @@ def vin(p, R, Rhalf, vmax=None, type=2):
         type (int, optional): Type I or Type II functional response. Defaults to 2.
 
     Returns:
-       N by 1 vector: Vin for each species
+       N by M matrix: Vin for each species
     '''
     # calculate uptake
     uptake = p * R.T[:, np.newaxis]
